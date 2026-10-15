@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloakNet - Настройки</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body class="metallic-theme">
+  <div class="options-container">
+    <header class="options-header">
+      <div class="brand">
+        <div class="logo-shield">
+          <svg viewBox="0 0 24 24" class="shield-icon" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M12 8v4M12 16h.01" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="page-title">CLOAK<span class="brand-accent">NET</span></h1>
+          <p class="page-subtitle">Параметры безопасности и серверов</p>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="saveTopBtn">Сохранить</button>
+    </header>
+
+    <main class="options-content">
+      <!-- Секция Cloudflare Workers -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-icon">⚡</div>
+          <div>
+            <h2 class="card-title">Cloudflare Worker (Edge Proxy)</h2>
+            <p class="card-desc">Бесплатный персональный сервер без аренды VPS (100k запросов/день)</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="workerUrl">URL вашего Cloudflare Worker:</label>
+            <div class="input-with-btn">
+              <input type="url" id="workerUrl" placeholder="https://cloaknet-proxy.your-account.workers.dev" class="text-input">
+              <button class="btn btn-secondary" id="testWorkerBtn">Проверить</button>
+            </div>
+            <span class="hint">Разверните код из папки <code>server/cloudflare-worker.js</code> в Cloudflare Dashboard</span>
+            <div id="workerTestResult" class="test-result"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="workerToken">Секретный токен доступа (Secret Token):</label>
+            <input type="text" id="workerToken" placeholder="cloaknet-secret-key-2026" class="text-input">
+            <span class="hint">Должен совпадать с SECRET_TOKEN в вашем коде Cloudflare Worker</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Секция Split Tunneling (Исключения сайтов) -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-icon">🌐</div>
+          <div>
+            <h2 class="card-title">Список исключений (Split Tunneling)</h2>
+            <p class="card-desc">Эти домены будут открываться напрямую через вашего провайдера, минуя прокси</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="bypassList">Домены-исключения (по одному на строку):</label>
+            <textarea id="bypassList" rows="6" class="textarea-input" placeholder="gosuslugi.ru&#10;sberbank.ru&#10;tbank.ru&#10;yandex.ru&#10;kinopoisk.ru"></textarea>
+            <span class="hint">Поддерживаются домены и маски (*.ru, domain.com)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Секция Безопасности -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-icon">🛡️</div>
+          <div>
+            <h2 class="card-title">Приватность и защита</h2>
+            <p class="card-desc">Дополнительные уровни шифрования и фильтрации трафика</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <label class="toggle-row">
+            <div class="toggle-info">
+              <span class="toggle-label">Защита от утечки WebRTC</span>
+              <span class="toggle-desc">Блокирует раскрытие реального IP через WebRTC STUN-запросы</span>
+            </div>
+            <input type="checkbox" id="blockWebRTC" class="toggle-checkbox">
+            <span class="toggle-slider"></span>
+          </label>
+
+          <label class="toggle-row">
+            <div class="toggle-info">
+              <span class="toggle-label">Блокировка рекламы и трекеров (AdBlock)</span>
+              <span class="toggle-desc">Фильтрация рекламных баннеров и скриптов отслеживания</span>
+            </div>
+            <input type="checkbox" id="adBlocker" class="toggle-checkbox">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Подвал настроек -->
+      <div class="footer-actions">
+        <button class="btn btn-primary btn-large" id="saveBottomBtn">Сохранить изменения</button>
+        <span id="saveNotice" class="save-notice"></span>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="options.js"></script>
+</body>
+</html>

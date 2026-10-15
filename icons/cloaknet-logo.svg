@@ -1,0 +1,42 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cloakMetalGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#555f70"/>
+      <stop offset="45%" stop-color="#232731"/>
+      <stop offset="55%" stop-color="#343b49"/>
+      <stop offset="100%" stop-color="#14171d"/>
+    </linearGradient>
+    <linearGradient id="netGlowGrad" x1="12" y1="4" x2="12" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00e6a0"/>
+      <stop offset="100%" stop-color="#00b4d8"/>
+    </linearGradient>
+    <filter id="coreGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Внешний силуэт мантии-невидимки (Stealth Cloak Hood) -->
+  <path d="M12 2L4 6.5V13C4 17.8 7.4 21.2 12 22.5C16.6 21.2 20 17.8 20 13V6.5L12 2Z" fill="url(#cloakMetalGrad)" stroke="rgba(255,255,255,0.2)" stroke-width="1.2"/>
+  
+  <!-- Внутренний темный фасет маскировки (Stealth Cavity) -->
+  <path d="M12 4.2L6 8V13C6 16.5 8.5 19.4 12 20.4C15.5 19.4 18 16.5 18 13V8L12 4.2Z" fill="#0f1116"/>
+
+  <!-- Линии кибер-сети (Net Mesh) -->
+  <path d="M12 5V11M12 11L7.5 9.5M12 11L16.5 9.5M12 11L8.5 15M12 11L15.5 15M12 11V18.5" stroke="url(#netGlowGrad)" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/>
+  
+  <!-- Узлы сети (Network Nodes) -->
+  <circle cx="12" cy="5" r="1.1" fill="#00e6a0"/>
+  <circle cx="7.5" cy="9.5" r="1.1" fill="#00e6a0"/>
+  <circle cx="16.5" cy="9.5" r="1.1" fill="#00e6a0"/>
+  <circle cx="8.5" cy="15" r="1.1" fill="#00e6a0"/>
+  <circle cx="15.5" cy="15" r="1.1" fill="#00e6a0"/>
+  <circle cx="12" cy="18.5" r="1.1" fill="#00e6a0"/>
+
+  <!-- Центральное стелс-ядро (Cloaking Core) -->
+  <circle cx="12" cy="11" r="2.2" fill="#00e6a0" filter="url(#coreGlow)"/>
+  <circle cx="12" cy="11" r="1.1" fill="#ffffff"/>
+</svg>

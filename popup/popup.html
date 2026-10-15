@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CloakNet Stealth VPN</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body class="metallic-theme">
+  <div class="app-container">
+    <!-- Верхняя панель (Header) -->
+    <header class="app-header">
+      <!-- Кнопка назад (видна только в подэкранах) -->
+      <button class="nav-btn hidden" id="backBtn" title="Назад">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+
+      <!-- Фирменный бренд CloakNet (главный экран) -->
+      <div class="brand" id="brandSection">
+        <div class="logo-cloak-wrap">
+          <svg viewBox="0 0 24 24" class="cloak-logo-svg" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="hdrCloakMetal" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#5a6578"/>
+                <stop offset="50%" stop-color="#242934"/>
+                <stop offset="100%" stop-color="#14171e"/>
+              </linearGradient>
+            </defs>
+            <!-- Силуэт мантии-невидимки -->
+            <path d="M12 2L4 6.5V13C4 17.8 7.4 21.2 12 22.5C16.6 21.2 20 17.8 20 13V6.5L12 2Z" fill="url(#hdrCloakMetal)" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
+            <path d="M12 4.2L6 8V13C6 16.5 8.5 19.4 12 20.4C15.5 19.4 18 16.5 18 13V8L12 4.2Z" fill="#0d0f14"/>
+            <!-- Кибер-сетка -->
+            <path d="M12 5V11M12 11L7.5 9.5M12 11L16.5 9.5M12 11L8.5 15M12 11L15.5 15M12 11V18.5" stroke="#00e6a0" stroke-width="1.2" stroke-linecap="round" opacity="0.85"/>
+            <!-- Узлы -->
+            <circle cx="12" cy="5" r="1.1" fill="#00e6a0"/>
+            <circle cx="7.5" cy="9.5" r="1.1" fill="#00e6a0"/>
+            <circle cx="16.5" cy="9.5" r="1.1" fill="#00e6a0"/>
+            <circle cx="8.5" cy="15" r="1.1" fill="#00e6a0"/>
+            <circle cx="15.5" cy="15" r="1.1" fill="#00e6a0"/>
+            <circle cx="12" cy="18.5" r="1.1" fill="#00e6a0"/>
+            <!-- Ядро маскировки -->
+            <circle cx="12" cy="11" r="2.2" fill="#00e6a0"/>
+            <circle cx="12" cy="11" r="1" fill="#ffffff"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">CLOAK<span class="brand-accent">NET</span></span>
+          <span class="brand-tag" id="modeBadge">WARP SOCKS5</span>
+        </div>
+      </div>
+
+      <!-- Заголовок подэкрана (Локации / Настройки) -->
+      <span class="view-title hidden" id="viewTitle">Локации</span>
+
+      <!-- Правая кнопка в шапке (Шестеренка или Сохранить) -->
+      <button class="icon-btn" id="headerActionBtn" title="Настройки">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- КОНТЕЙНЕР ЭКРАНОВ (VIEWS) -->
+    <div class="views-wrapper">
+
+      <!-- ================= 1. ГЛАВНЫЙ ЭКРАН (STEALTH COCKPIT) ================= -->
+      <section class="view active" id="viewMain">
+        <!-- Баннер уведомлений о настройке -->
+        <div class="setup-banner hidden" id="setupBanner">
+          <div class="setup-banner-text">
+            <strong>Требуется настройка прокси</strong>
+            <span>Укажите рабочий сервер для маскировки</span>
+          </div>
+          <button class="btn btn-tiny" id="bannerSetupBtn">Настроить</button>
+        </div>
+
+        <!-- Индикатор статуса маскировки -->
+        <div class="status-indicator" id="statusBox">
+          <span class="status-dot" id="statusDot"></span>
+          <div class="status-texts">
+            <span class="status-label" id="statusText">МАСКИРОВКА ОТКЛЮЧЕНА</span>
+            <span class="status-sub" id="statusSub">Трафик открыт для провайдера</span>
+          </div>
+          <span class="timer-label" id="sessionTimer">--:--</span>
+        </div>
+
+        <!-- Центральный генератор маскировки (Power Cloak Dial) -->
+        <div class="power-wrapper">
+          <div class="metallic-dial-outer" id="dialOuter">
+            <div class="metallic-dial-ring">
+              <button class="power-button" id="powerBtn" title="Включить / Выключить маскировку">
+                <!-- Центральная эмблема мантии-невидимки -->
+                <div class="power-cloak-icon">
+                  <svg viewBox="0 0 24 24" class="power-svg-icon" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L4 6.5V13C4 17.8 7.4 21.2 12 22.5C16.6 21.2 20 17.8 20 13V6.5L12 2Z" class="power-cloak-outline" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M12 6V11M12 11L8 9.5M12 11L16 9.5M12 11L8.5 15M12 11L15.5 15M12 11V18" class="power-net-lines" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                    <circle cx="12" cy="11" r="2.4" class="power-core-glow" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div class="power-ring-waves"></div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Карточка активной локации (выходной узел) -->
+        <div class="location-card" id="openLocationsBtn" title="Нажмите для смены локации">
+          <div class="loc-flag-box">
+            <img src="../icons/icon32.png" alt="Flag" id="currentFlag" class="loc-flag">
+          </div>
+          <div class="loc-info">
+            <div class="loc-country-row">
+              <span class="loc-country" id="currentCountry">Auto (Fastest)</span>
+              <span class="loc-badge" id="currentPing">25 ms</span>
+            </div>
+            <span class="loc-city" id="currentCity">Cloudflare Edge (AUTO)</span>
+          </div>
+          <div class="loc-chevron">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Нижняя плашка: внешний IP и стелс-щиты -->
+        <div class="meta-strip">
+          <div class="ip-info-box">
+            <span class="meta-title">ВНЕШНИЙ IP:</span>
+            <span class="meta-val" id="ipAddress">Проверка...</span>
+          </div>
+          <div class="shields-row">
+            <div class="shield-badge active" id="shieldWebRTC" title="WebRTC Leak Protection активна (LAN IP скрыт)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>WebRTC</span>
+            </div>
+            <div class="shield-badge active" id="shieldAdBlock" title="AdBlock / Anti-Tracker активен">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+              </svg>
+              <span>AdBlock</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 2. ЭКРАН ВЫБОРА ЛОКАЦИИ ================= -->
+      <section class="view" id="viewLocations">
+        <!-- Поиск -->
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="searchLocationInput" placeholder="Поиск страны, города или кода...">
+          <button class="clear-search-btn hidden" id="clearSearchBtn">✕</button>
+        </div>
+
+        <!-- Табы регионов (Рекомендуемые / Европа / Америка / Азия) -->
+        <div class="region-tabs" id="regionTabs">
+          <button class="tab-chip active" data-region="all">Все</button>
+          <button class="tab-chip" data-region="recommended">Рекомендуемые</button>
+          <button class="tab-chip" data-region="europe">Европа</button>
+          <button class="tab-chip" data-region="americas">Америка</button>
+          <button class="tab-chip" data-region="asia">Азия</button>
+        </div>
+
+        <!-- Список локаций (адаптивный скролл) -->
+        <div class="locations-list" id="locationsList">
+          <!-- Генерируется через JS -->
+        </div>
+      </section>
+
+      <!-- ================= 3. ЭКРАН НАСТРОЕК (ВНУТРИ ОКНА) ================= -->
+      <section class="view" id="viewSettings">
+        <div class="settings-scroll-area">
+          <!-- Выбор режима проксирования -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <div class="card-icon">🔌</div>
+              <div>
+                <span class="settings-card-title">Тип подключения (Proxy Mode)</span>
+                <span class="settings-card-desc">Выберите источник прокси-сервера</span>
+              </div>
+            </div>
+            <div class="settings-card-body">
+              <div class="mode-tabs">
+                <button type="button" class="mode-tab active" id="tabModeWarp" data-mode="warp">
+                  ⚡ WARP (SOCKS5)
+                </button>
+                <button type="button" class="mode-tab" id="tabModeCustom" data-mode="custom">
+                  🌐 Свой прокси
+                </button>
+                <button type="button" class="mode-tab" id="tabModeWorker" data-mode="cloudflare">
+                  ☁️ Worker
+                </button>
+              </div>
+
+              <!-- Панель 1: Cloudflare WARP SOCKS5 -->
+              <div class="mode-panel active" id="panelWarp">
+                <p class="panel-desc">
+                  Официальный бесплатный туннель <strong>Cloudflare WARP</strong>. Открывает любые заблокированные HTTPS-сайты (Wikipedia, YouTube и др.) без ограничений скорости.
+                </p>
+                <div class="form-row">
+                  <div class="form-group flex-2">
+                    <label for="inputWarpHost">Хост:</label>
+                    <input type="text" id="inputWarpHost" value="127.0.0.1" class="text-input">
+                  </div>
+                  <div class="form-group flex-1">
+                    <label for="inputWarpPort">Порт:</label>
+                    <input type="text" id="inputWarpPort" value="40000" class="text-input">
+                  </div>
+                </div>
+                <div class="input-with-action mt-2">
+                  <button type="button" class="btn btn-secondary btn-full" id="btnTestWarp">Проверить связь с WARP</button>
+                </div>
+                <div id="warpTestResult" class="test-result"></div>
+                <span class="form-hint">
+                  Запуск WARP в режиме прокси: <code>warp-cli mode proxy && warp-cli connect</code>
+                </span>
+              </div>
+
+              <!-- Панель 2: Пользовательский SOCKS5 / HTTPS -->
+              <div class="mode-panel" id="panelCustom">
+                <p class="panel-desc">
+                  Подключение к вашему персональному или бесплатному SOCKS5/HTTPS прокси.
+                </p>
+                <div class="form-row">
+                  <div class="form-group flex-1">
+                    <label for="selectCustomProto">Протокол:</label>
+                    <select id="selectCustomProto" class="select-input">
+                      <option value="socks5" selected>SOCKS5</option>
+                      <option value="https">HTTPS</option>
+                      <option value="http">HTTP</option>
+                    </select>
+                  </div>
+                  <div class="form-group flex-2">
+                    <label for="inputCustomHost">Хост / IP:</label>
+                    <input type="text" id="inputCustomHost" placeholder="185.x.x.x" class="text-input">
+                  </div>
+                  <div class="form-group flex-1">
+                    <label for="inputCustomPort">Порт:</label>
+                    <input type="text" id="inputCustomPort" placeholder="1080" class="text-input">
+                  </div>
+                </div>
+                <div class="form-row mt-2">
+                  <div class="form-group flex-1">
+                    <label for="inputCustomUser">Логин (опционально):</label>
+                    <input type="text" id="inputCustomUser" placeholder="User" class="text-input">
+                  </div>
+                  <div class="form-group flex-1">
+                    <label for="inputCustomPass">Пароль:</label>
+                    <input type="password" id="inputCustomPass" placeholder="Pass" class="text-input">
+                  </div>
+                </div>
+                <div class="input-with-action mt-2">
+                  <button type="button" class="btn btn-secondary btn-full" id="btnTestCustom">Проверить прокси</button>
+                </div>
+                <div id="customTestResult" class="test-result"></div>
+              </div>
+
+              <!-- Панель 3: Cloudflare Worker -->
+              <div class="mode-panel" id="panelWorker">
+                <p class="panel-desc alert-text">
+                  ⚠️ <strong>Ограничение CDN:</strong> Cloudflare Workers блокируют метод CONNECT, из-за чего прямое открытие HTTPS-сайтов недоступно. Используйте режим WARP или SOCKS5.
+                </p>
+                <div class="form-group">
+                  <label for="inputWorkerUrl">URL вашего Cloudflare Worker:</label>
+                  <div class="input-with-action">
+                    <input type="url" id="inputWorkerUrl" placeholder="https://cloaknet-proxy.user.workers.dev" class="text-input">
+                    <button type="button" class="btn btn-secondary" id="btnTestWorker">Тест</button>
+                  </div>
+                  <div id="workerTestResult" class="test-result"></div>
+                </div>
+
+                <div class="form-group">
+                  <label for="inputWorkerToken">Секретный ключ (Token):</label>
+                  <input type="text" id="inputWorkerToken" placeholder="cloaknet-secret-key-2026" class="text-input">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Блок Split Tunneling (Исключения) -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <div class="card-icon">🌐</div>
+              <div>
+                <span class="settings-card-title">Список исключений (Split Tunneling)</span>
+                <span class="settings-card-desc">Сайты, которые открываются напрямую через провайдера</span>
+              </div>
+            </div>
+            <div class="settings-card-body">
+              <div class="form-group">
+                <label for="inputBypassList">Домены (по одному на строку):</label>
+                <textarea id="inputBypassList" rows="4" class="textarea-input" placeholder="gosuslugi.ru&#10;sberbank.ru&#10;tbank.ru&#10;kinopoisk.ru&#10;yandex.ru"></textarea>
+                <span class="form-hint">Поддерживаются IDN/Punycode домены и поддомены</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Блок Приватности -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <div class="card-icon">🛡️</div>
+              <div>
+                <span class="settings-card-title">Приватность и безопасность</span>
+              </div>
+            </div>
+            <div class="settings-card-body">
+              <label class="toggle-row">
+                <div class="toggle-info">
+                  <span class="toggle-label">Прямой доступ к поиску (Google, Yandex)</span>
+                  <span class="toggle-desc">Предотвращает зависание поиска Google и проверку капчи</span>
+                </div>
+                <input type="checkbox" id="checkBypassSearch" class="toggle-checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+
+              <label class="toggle-row">
+                <div class="toggle-info">
+                  <span class="toggle-label">Защита от утечки WebRTC</span>
+                  <span class="toggle-desc">Скрывает реальный локальный IP адрес без блокировки UDP</span>
+                </div>
+                <input type="checkbox" id="checkWebRTC" class="toggle-checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+
+              <label class="toggle-row">
+                <div class="toggle-info">
+                  <span class="toggle-label">Блокировка рекламы и трекеров</span>
+                  <span class="toggle-desc">Фильтрация баннеров и следящих скриптов</span>
+                </div>
+                <input type="checkbox" id="checkAdBlock" class="toggle-checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Кнопка сохранения -->
+          <div class="settings-footer">
+            <button class="btn btn-primary btn-full" id="btnSaveSettings">Сохранить настройки</button>
+            <span class="save-status-msg" id="saveStatusMsg"></span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
